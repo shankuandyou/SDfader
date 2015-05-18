@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+</head>
+<body>
+<style>
+    .SDfader-thumbs img {
+        border: solid 5px rgba(0, 0, 0, 0.5);
+        width: 75px;
+        height: 75px;
+        margin: 20px;
+    }
+
+    .SDfader-thumbs {
+        position: relative;
+        text-align: center;
+    }
+
+    #SDfader-next {
+        position: absolute;
+        right: 0px;
+        top: 50%;
+    }
+
+    #SDfader {
+        position: relative;
+        text-align: center;
+    }
+
+    #SDfader>img#changer {
+        width: 80%;
+        height: 80%;
+    }
+
+    #SDfader-prev,#SDfader-next {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid grey;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    #SDfader-prev {
+        position: absolute;    top: 50%;    left: 0px;
+    }
+
+    #SDfader-prev::before {
+        content: '';
+        position: absolute;
+        left: -5px;
+        margin-left: -1em;
+        border: 10px solid transparent;
+        border-right: 10px solid grey;
+    }
+
+    #SDfader-next::after {
+        content: '';    position: absolute;
+        right: -5px;
+        margin-right: -1em;    border: 10px solid transparent;
+        border-left: 10px solid grey;
+    }
+</style>
+<div class="body-wrap">
+    <div class="container">
+        <h1 class="text-center page-header well">
+            Fading image changer
+        </h1>
+        <div class="panel panel-Primary text-center">
+            <div class="panel-heading">
+                Jquery Image Changer with fading effect
+            </div>
+            <div class="panel-body row">
+                <div id="SDfader" class="col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script>
+    var images;
+    images = [
+        'img/sudipta-deb-cartoon1.jpg',
+        'img/sudipta-deb-cartoon2.jpg',
+        'img/sudipta-deb-cartoon3.jpg'
+    ];
+    function findcurimg(){
+        var cur;
+        cur = $('#SDfader-img').attr('src');
+        return ($.inArray(cur,images));
+    }
+    function nextimg(){
+        var current;
+        current = findcurimg();
+        if(current != undefined)
+        {
+            if(current == images.length - 1)
+            {
+                current = 0 ;
+            }
+            else
+            {
+                current++;
+            }
+            $('#SDfader-img').animate({
+                opacity : 0
+            },1000,function(){
+                $(this).attr('src',images[current]);
+                $('#SDfader-img ').animate({
+                    opacity: 1
+                },1000)
+            })
+        }
+        else
+        alert('current prob');
+
+    }
+    function previmg(){
+        var current;
+        current = findcurimg();
+        if(current != undefined)
+        {
+            if(current==0)
+            {
+                current = images.length  ;
+            }
+            else
+            {
+                current--;
+            }
+            $('#SDfader-img').animate({
+                opacity : 0
+            },1000,function(){
+                $(this).attr('src',images[current]);
+                $('#SDfader-img').animate({
+                    opacity: 1
+                },1000)
+            })
+        }
+        else
+            alert('current prob');
+
+    }
+    function gotoimg(i)
+    {
+        if(i>=images.length)
+        {
+            return false ;
+        }
+        $('#SDfader-img').animate({
+            opacity : 0
+        },1000,function(){
+            $(this).attr('src',images[i]);
+            $('#SDfader-img').animate({
+                opacity: 1
+            },1000)
+        })
+    }
+    function initSDfader(elem)
+    {
+        elem.append('<span id="SDfader-prev" onclick="previmg();">Prev</span>');
+        elem.append('<img id="SDfader-img" width="100%" src="'+images[0]+'">');
+        elem.append('<span id="SDfader-next" onclick="nextimg();">Next</span>');
+        elem.append('<div class="SDfader-thumbs"></div>');
+        var i ;
+        for(i = 0;i<images.length;i++)
+        {
+            elem.children('.SDfader-thumbs').append('<img src="'+images[i]+'" onclick="gotoimg('+i+');">');
+        }
+    }
+    initSDfader($('#SDfader'));
+</script>
+</body>
+</html>
